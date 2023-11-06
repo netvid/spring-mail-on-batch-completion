@@ -1,0 +1,32 @@
+server:
+  port: 8081
+spring:
+  datasource:
+    username: sa
+    password: ''
+    url: jdbc:h2:mem:testdb
+    driver-class-name: org.h2.Driver
+  mail:
+    port: 587
+    host:
+    username:
+    password:
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+        debug: true
+  batch:
+    job:
+      enabled: 'false'
+    jdbc:
+      initialize-schema: always
+springdoc:
+  api-docs:
+    enabled: true
+    path: /api/docs
+  swagger-ui:
+    enabled: true
+    path: /api/device/v1

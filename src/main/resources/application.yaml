@@ -1,0 +1,32 @@
+server:
+  port: ${SERVER_PORT}
+spring:
+  datasource:
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
+    url: ${DATASOURCE_URL}
+    driver-class-name: ${DATASOURCE_DRIVER}
+  mail:
+    port: ${MAIL_PORT}
+    host: ${MAIL_HOST}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+        debug: true
+  batch:
+    job:
+      enabled: 'false'
+    jdbc:
+      initialize-schema: always
+springdoc:
+  api-docs:
+    enabled: true
+    path: /api/docs
+  swagger-ui:
+    enabled: true
+    path: /api/device/v1
