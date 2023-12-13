@@ -2,6 +2,9 @@ package com.example.domain.batch.job;
 
 import com.example.domain.batch.listener.JobCompletionNotificationListener;
 import com.example.domain.batch.processor.DeviceProcessor;
+import com.example.domain.batch.writer.DeviceWriter1;
+import com.example.domain.batch.writer.DeviceWriter2;
+import com.example.domain.batch.writer.DeviceWriter3;
 import com.example.domain.model.Device;
 import com.example.domain.repository.DeviceRepository;
 import org.springframework.batch.core.Job;
@@ -10,13 +13,18 @@ import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.step.builder.StepBuilder;
+import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.data.RepositoryItemReader;
 import org.springframework.batch.item.data.RepositoryItemWriter;
 import org.springframework.batch.item.data.builder.RepositoryItemReaderBuilder;
 import org.springframework.batch.item.data.builder.RepositoryItemWriterBuilder;
+import org.springframework.batch.item.support.CompositeItemWriter;
+import org.springframework.batch.item.support.builder.CompositeItemWriterBuilder;
 import org.springframework.batch.repeat.RepeatStatus;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.PlatformTransactionManager;
 
@@ -64,12 +72,19 @@ public class SampleJob {
     }
 
     @Bean
-    public Step sampleStep(JobRepository jobRepository,PlatformTransactionManager transactionManager){
+    public Step sampleStep(JobRepository jobRepository,
+                           PlatformTransactionManager transactionManager,
+                           DeviceWriter1 deviceWriter1,
+                           DeviceWriter2 deviceWriter2,
+                           DeviceWriter3 deviceWriter3,
+                           CompositeItemWriter<Device> compositeItemWriter){
         return new StepBuilder("sampleStep1",jobRepository)
                 .<Device,Device>chunk(BATCH_DEFAULT_CHUNK_SIZE,transactionManager)
+                .listener(deviceWriter1)
+                .listener(deviceWriter2)
+                .listener(deviceWriter3)
                 .reader(deviceRepositoryItemReader())
-                .processor(this.deviceProcessor)
-                .writer(deviceRepositoryItemWriter())
+                .writer(compositeItemWriter)
                 .build();
     }
 
@@ -83,5 +98,17 @@ public class SampleJob {
                     return RepeatStatus.FINISHED;
                 },transactionManager)
                 .build();
+    }
+
+    @Bean
+    @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
+    public CompositeItemWriter<Device> compositeItemWriter(
+            DeviceWriter1 deviceWriter1,
+            DeviceWriter2 deviceWriter2,
+            DeviceWriter3 deviceWriter3){
+        return new CompositeItemWriterBuilder<Device>()
+                .delegates(deviceWriter1,deviceWriter2,deviceWriter3)
+                .build();
+
     }
 }

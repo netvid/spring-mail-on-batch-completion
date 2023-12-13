@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'com.example'
-version = '0.0.1-SNAPSHOT'
+version = '0.0.1'
 
 java {
     sourceCompatibility = '17'
@@ -21,13 +21,23 @@ repositories {
     mavenCentral()
 }
 
+// *********** PROPERTIES ***********
+ext {
+    springJpaVersion = '3.1.5'
+    springBatchVersion = '3.1.5'
+    springWebVersion = '3.1.5'
+    springDocWebMvcVersion = '2.2.0'
+}
+
+// *********** DEPENDENCIES ***********
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-mail'
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '3.1.5'
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-batch', version: '3.1.5'
-    implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.2.0'
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '3.1.5'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: "${springJpaVersion}"
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-batch', version: "${springBatchVersion}"
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: "${springWebVersion}"
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: "${springDocWebMvcVersion}"
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-freemarker', version: '3.1.5'
+    implementation 'org.quartz-scheduler:quartz:2.3.2'
     implementation group: 'com.h2database', name: 'h2', version: '2.2.224'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'

@@ -31,10 +31,10 @@ public class InitialDummyDataConfig {
             Device device3 = new Device("MSI 800");
             List<Device> deviceList = Arrays.asList(device1,device2,device3);
             this.deviceRepository.saveAll(deviceList);
+            log.info("Dummy data has inserted success");
         }catch (Exception ex){
             log.error("An error has occurred inserting dummy data, error: {}",ex.getMessage());
             return ;
         }
-        log.info("Dummy data has inserted success");
     }
 }

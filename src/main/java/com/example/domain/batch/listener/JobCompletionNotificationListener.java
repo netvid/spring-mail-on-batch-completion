@@ -38,6 +38,6 @@ public class JobCompletionNotificationListener implements JobExecutionListener {
                 .additionalParams(Collections.singletonMap("Processed Items",jobExecution.getExecutionContext().getInt(BATCH_DEVICE_KEY_1)))
                 .build();
 
-        this.emailService.sendBatchReportEmail(this.testMail,"Batch report",batchMailRequest,this.testMail);
+//        this.emailService.sendBatchReportEmail(this.testMail,"Batch report",batchMailRequest,this.testMail);
     }
 }
